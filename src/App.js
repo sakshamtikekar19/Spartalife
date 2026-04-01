@@ -109,11 +109,17 @@ const whyChoose = [
 
 const facilitySlug = (title) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
+/** Softer spacing for higher indices so tail cards (e.g. Meditation → Banquet) do not drift too far apart. */
+function stackDepthY(idx, gap) {
+  if (idx <= 0) return 0;
+  return gap * Math.pow(idx, 0.82);
+}
+
 function useStackGap() {
-  const [gap, setGap] = useState(36);
+  const [gap, setGap] = useState(32);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setGap(mq.matches ? 56 : 34);
+    const update = () => setGap(mq.matches ? 46 : 28);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
@@ -125,8 +131,8 @@ function StackedCard({ item, idx, total, progress, onSelect, stackGap }) {
   const start = idx / total;
   const end = (idx + 1) / total;
   const local = useTransform(progress, [start, end], [0, 1]);
-  const baseY = idx * stackGap;
-  const y = useTransform(local, [0, 1], [baseY, -280 - stackGap]);
+  const baseY = stackDepthY(idx, stackGap);
+  const y = useTransform(local, [0, 1], [baseY, -260 - stackGap]);
   const rotateX = useTransform(local, [0, 1], [0, 11]);
   const opacity = useTransform(local, [0, 0.8, 1], [Math.max(0.12, 1 - idx * 0.095), 0.45, 0]);
   const scale = useTransform(local, [0, 1], [1 - idx * 0.045, 0.82 - idx * 0.012]);
@@ -181,8 +187,9 @@ function PhotoSlide({ item, idx, total, progress, stackGap }) {
   const start = idx / total;
   const end = (idx + 1) / total;
   const local = useTransform(progress, [start, end], [0, 1]);
-  const photoStep = stackGap * 0.42;
-  const y = useTransform(local, [0, 1], [idx * photoStep, -200]);
+  const photoStep = stackGap * 0.38;
+  const basePhotoY = stackDepthY(idx, photoStep);
+  const y = useTransform(local, [0, 1], [basePhotoY, -190]);
   const x = useTransform(local, [0, 1], [0, 36]);
   const opacity = useTransform(local, [0, 0.8, 1], [Math.max(0.15, 1 - idx * 0.09), 0.5, 0]);
   const scale = useTransform(local, [0, 1], [1 - idx * 0.035, 0.88 - idx * 0.012]);
