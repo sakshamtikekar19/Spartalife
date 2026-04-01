@@ -1,5 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  Battery,
+  Droplet,
+  Dumbbell,
+  Package,
+  Target,
+  UserCheck,
+  Utensils,
+} from "lucide-react";
+import {
+  motion,
+  useInView,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
 const facilities = [
   { title: "Fitness Gym", desc: "Hardcore and functional performance training.", type: "performance", image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1200" },
@@ -34,14 +50,42 @@ const topAmenities = [
   },
 ];
 
-const trainingSteps = [
-  "Blood Report",
-  "Full Body Assessment",
-  "Goal Setting",
-  "Workout Plan",
-  "Diet Plan",
-  "Meal Subscription",
-  "Optimal Recovery Time",
+const eliteProtocolSteps = [
+  {
+    title: "Blood Report",
+    desc: "Science-backed baseline for personalized nutrition.",
+    Icon: Droplet,
+  },
+  {
+    title: "Full Body Assessment",
+    desc: "Mobility, strength, and posture analysis.",
+    Icon: UserCheck,
+  },
+  {
+    title: "Goal Setting",
+    desc: "Defining clear, achievable milestones.",
+    Icon: Target,
+  },
+  {
+    title: "Workout Plan",
+    desc: "Customized high-performance programming.",
+    Icon: Dumbbell,
+  },
+  {
+    title: "Diet Plan",
+    desc: "Precision macros designed for your specific physiology.",
+    Icon: Utensils,
+  },
+  {
+    title: "Meal Subscription",
+    desc: "Chef-prepared, nutrient-dense meals delivered to your door.",
+    Icon: Package,
+  },
+  {
+    title: "Optimal Recovery Time",
+    desc: "Structured rest, sleep tracking, and infrared therapy integration.",
+    Icon: Battery,
+  },
 ];
 
 const whyChoose = [
@@ -77,7 +121,7 @@ function StackedCard({ item, idx, total, progress, onSelect }) {
   return (
     <motion.article
       style={{ y, rotateX, opacity, scale, zIndex: total - idx }}
-      className="absolute inset-0 m-auto h-fit w-[min(92vw,700px)] overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-sm md:rounded-3xl md:p-8 md:backdrop-blur-md will-change-transform lg:left-0 lg:right-auto lg:mx-0"
+      className="absolute inset-0 m-auto h-fit w-full max-w-[min(92vw,700px)] overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-sm md:rounded-3xl md:p-8 md:backdrop-blur-md lg:max-w-full lg:bg-[#0b0b0b]/96 lg:backdrop-blur-none will-change-transform lg:left-0 lg:right-auto lg:mx-0"
     >
       {idx === 0 && (
         <motion.div
@@ -120,13 +164,141 @@ function PhotoSlide({ item, idx, total, progress }) {
   return (
     <motion.figure
       style={{ y, x, opacity, scale, zIndex: total - idx }}
-      className="absolute inset-0 m-auto h-[420px] w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-2xl"
+      className="absolute inset-0 m-auto isolate h-[420px] w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl"
     >
-      <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
-      <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-sm text-zinc-200">
+      <img src={item.image} alt={item.title} className="relative z-10 h-full w-full object-cover" />
+      <figcaption className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4 text-sm text-zinc-200">
         {item.title}
       </figcaption>
     </motion.figure>
+  );
+}
+
+function ProtocolStepCard({ step, index, activeStep, setActiveStep }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { amount: 0.4, margin: "-36% 0px -36% 0px" });
+  const isActive = index === activeStep;
+
+  useEffect(() => {
+    if (isInView) {
+      setActiveStep(index);
+    }
+  }, [isInView, index, setActiveStep]);
+
+  const Icon = step.Icon;
+
+  return (
+    <motion.article
+      ref={ref}
+      animate={{
+        scale: isActive ? 1.05 : 1,
+        opacity: isActive ? 1 : 0.2,
+      }}
+      transition={{ type: "spring", stiffness: 320, damping: 28 }}
+      className={`relative min-h-[min(45vh,400px)] scroll-mt-28 rounded-2xl border p-6 backdrop-blur-xl md:p-8 ${
+        isActive
+          ? "z-10 border-emerald-400/50 bg-white/[0.08] shadow-[0_0_40px_rgba(16,185,129,0.35),0_0_80px_rgba(16,185,129,0.12)]"
+          : "z-0 border-white/10 bg-white/5"
+      }`}
+    >
+      <div className="flex items-start gap-4">
+        <div
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border ${
+            isActive ? "border-emerald-400/60 bg-emerald-500/15 text-emerald-300" : "border-white/10 bg-white/5 text-zinc-500"
+          }`}
+        >
+          <Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400/90">
+            Step {String(index + 1).padStart(2, "0")}
+          </p>
+          <h4 className="mt-2 text-xl font-black tracking-[-0.05em] text-white md:text-2xl">{step.title}</h4>
+          <p className="mt-3 text-sm leading-relaxed tracking-tight text-zinc-300 md:text-base">{step.desc}</p>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+function ElitePerformanceProtocol() {
+  const sectionRef = useRef(null);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 0.2", "end 0.75"],
+  });
+
+  const fillHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const fillWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="elite-performance-protocol"
+      className="scroll-mt-24 border-t border-white/10 bg-black py-20 md:py-28"
+    >
+      <div className="mx-auto max-w-7xl px-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">Success Map</p>
+        <h3 className="mt-4 text-4xl font-black tracking-[-0.06em] text-white md:text-6xl">
+          Elite Performance Protocol
+        </h3>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed tracking-tight text-zinc-400 md:text-base">
+          From testing to recovery — seven locked-in phases that turn data into execution, and execution into measurable
+          evolution.
+        </p>
+
+        <div className="mt-14 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(220px,300px)_1fr] lg:gap-16">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <div className="mb-8 flex items-center gap-4 lg:hidden">
+              <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-white/10">
+                <motion.div
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 shadow-[0_0_18px_rgba(16,185,129,0.55)]"
+                  style={{ width: fillWidth }}
+                />
+              </div>
+              <span className="font-black tabular-nums text-3xl tracking-[-0.08em] text-emerald-400 drop-shadow-[0_0_18px_rgba(16,185,129,0.45)]">
+                {String(activeStep + 1).padStart(2, "0")}
+              </span>
+            </div>
+
+            <div className="hidden flex-col items-center gap-8 lg:flex">
+              <motion.span
+                key={activeStep}
+                initial={{ opacity: 0.65, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-7xl font-black tabular-nums tracking-[-0.1em] text-emerald-400 drop-shadow-[0_0_28px_rgba(16,185,129,0.45)] md:text-8xl"
+              >
+                {String(activeStep + 1).padStart(2, "0")}
+              </motion.span>
+              <div className="relative h-[min(58vh,420px)] w-2 overflow-hidden rounded-full bg-white/10">
+                <motion.div
+                  className="absolute left-0 right-0 top-0 rounded-full bg-gradient-to-b from-emerald-300 via-emerald-400 to-emerald-600 shadow-[0_0_26px_rgba(16,185,129,0.65)]"
+                  style={{ height: fillHeight }}
+                />
+              </div>
+              <p className="max-w-[220px] text-center text-[11px] uppercase tracking-[0.28em] text-zinc-500">
+                Scroll the protocol
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-6 md:gap-8">
+            {eliteProtocolSteps.map((step, index) => (
+              <ProtocolStepCard
+                key={step.title}
+                step={step}
+                index={index}
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -226,7 +398,7 @@ function App() {
           />
           <div className="absolute inset-0 px-2 lg:px-6">
             <div className="mx-auto grid h-full w-full max-w-7xl place-items-center lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
-              <div className="relative h-full w-full">
+              <div className="relative h-full w-full min-w-0 overflow-hidden lg:pr-1">
                 {facilities.map((item, idx) => (
                   <StackedCard
                     key={item.title}
@@ -242,7 +414,7 @@ function App() {
             </div>
           </div>
           {isDesktop && (
-            <div className="absolute right-6 top-1/2 hidden h-[440px] w-[300px] -translate-y-1/2 lg:block">
+            <div className="absolute right-6 top-1/2 z-20 hidden h-[440px] w-[300px] -translate-y-1/2 lg:block">
               {facilities.map((item, idx) => (
                 <PhotoSlide key={`${item.title}-photo`} item={item} idx={idx} total={facilities.length} progress={scrollYProgress} />
               ))}
@@ -305,19 +477,7 @@ function App() {
         </div>
       </section>
 
-      <section className="border-t border-white/10 bg-black py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <h3 className="text-4xl font-black tracking-[-0.05em] md:text-5xl">Our Training System</h3>
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {trainingSteps.map((step, idx) => (
-              <div key={step} className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-emerald-300">Step {idx + 1}</p>
-                <p className="mt-3 text-lg font-semibold text-white">{step}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ElitePerformanceProtocol />
 
       <section className="border-t border-white/10 bg-black py-20">
         <div className="mx-auto max-w-7xl px-6">
