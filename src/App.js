@@ -131,32 +131,44 @@ function StackedCard({ item, idx, total, progress, onSelect, stackGap }) {
   const opacity = useTransform(local, [0, 0.8, 1], [Math.max(0.12, 1 - idx * 0.095), 0.45, 0]);
   const scale = useTransform(local, [0, 1], [1 - idx * 0.045, 0.82 - idx * 0.012]);
 
+  const accent =
+    item.type === "performance"
+      ? "border-l-emerald-500/70 shadow-[0_0_0_1px_rgba(16,185,129,0.12),0_20px_50px_-15px_rgba(0,0,0,0.9)]"
+      : "border-l-amber-500/55 shadow-[0_0_0_1px_rgba(245,158,11,0.1),0_20px_50px_-15px_rgba(0,0,0,0.9)]";
+
   return (
     <motion.article
       style={{ y, rotateX, opacity, scale, zIndex: total - idx }}
-      className="absolute inset-0 m-auto h-fit w-full max-w-[min(92vw,700px)] overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-sm md:rounded-3xl md:p-8 md:backdrop-blur-md lg:max-w-full lg:bg-[#0b0b0b]/96 lg:backdrop-blur-none will-change-transform lg:left-0 lg:right-auto lg:mx-0"
+      className={`absolute inset-0 m-auto h-fit w-full max-w-[min(92vw,700px)] overflow-hidden rounded-2xl border border-white/[0.06] border-l-[3px] bg-gradient-to-br from-zinc-900/95 via-[#0c0c0c] to-black p-6 shadow-2xl backdrop-blur-md md:rounded-3xl md:p-9 lg:max-w-full lg:backdrop-blur-sm will-change-transform lg:left-0 lg:right-auto lg:mx-0 ${accent}`}
     >
       {idx === 0 && (
         <motion.div
           animate={{
-            opacity: [0.35, 1, 0.35],
+            opacity: [0.25, 0.55, 0.25],
           }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          className={`pointer-events-none absolute inset-0 z-0 rounded-3xl border ${
-            item.type === "performance" ? "border-emerald-400/70" : "border-amber-400/70"
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          className={`pointer-events-none absolute inset-0 z-0 rounded-3xl ring-1 ring-inset ${
+            item.type === "performance" ? "ring-emerald-500/35" : "ring-amber-500/30"
           }`}
         />
       )}
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-white/[0.03] to-transparent" />
       <div className="relative z-10">
-        <p className="mb-4 text-xs uppercase tracking-[0.2em] text-zinc-300">
+        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-zinc-500 md:text-xs">
           {item.type === "performance" ? "Performance" : "Wellness / Recovery"}
         </p>
-        <h3 className="text-3xl font-black tracking-[-0.06em] text-white md:text-7xl">{item.title}</h3>
-        <p className="mt-3 max-w-xl text-xs text-zinc-300 md:mt-4 md:text-base">{item.desc}</p>
+        <h3 className="text-3xl font-black tracking-[-0.07em] text-white drop-shadow-sm md:text-6xl lg:text-7xl">{item.title}</h3>
+        <p className="mt-3 max-w-xl text-sm leading-relaxed tracking-tight text-zinc-400 md:mt-4 md:text-base">
+          {item.desc}
+        </p>
         <button
           type="button"
           onClick={() => onSelect(item.title)}
-          className="mt-5 rounded-full border border-white/30 px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:border-emerald-300 hover:text-emerald-200 md:text-sm"
+          className={`mt-6 rounded-full px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] transition md:text-xs ${
+            item.type === "performance"
+              ? "border border-emerald-500/40 bg-emerald-500/10 text-emerald-100 hover:bg-emerald-500/20 hover:shadow-[0_0_24px_rgba(16,185,129,0.25)]"
+              : "border border-amber-500/35 bg-amber-500/10 text-amber-50 hover:bg-amber-500/18 hover:shadow-[0_0_24px_rgba(245,158,11,0.2)]"
+          }`}
         >
           View Details
         </button>
@@ -178,10 +190,16 @@ function PhotoSlide({ item, idx, total, progress, stackGap }) {
   return (
     <motion.figure
       style={{ y, x, opacity, scale, zIndex: total - idx }}
-      className="absolute inset-0 m-auto isolate h-[420px] w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl"
+      className="absolute inset-0 m-auto isolate h-[420px] w-[280px] overflow-hidden rounded-2xl border border-white/[0.08] bg-black shadow-[0_24px_60px_-12px_rgba(0,0,0,0.95)] ring-1 ring-white/5"
     >
-      <img src={item.image} alt={item.title} className="relative z-10 h-full w-full object-cover" />
-      <figcaption className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/80 to-transparent p-4 text-sm text-zinc-200">
+      <img
+        src={item.image}
+        alt={item.title}
+        className="relative z-[1] h-full w-full object-cover brightness-[0.6] contrast-[1.1] saturate-[0.85]"
+      />
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-black/55 via-black/25 to-black/80" />
+      <div className="pointer-events-none absolute inset-0 z-[3] bg-black/25" />
+      <figcaption className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black via-black/95 to-transparent px-4 pb-4 pt-10 text-sm font-semibold tracking-tight text-zinc-100">
         {item.title}
       </figcaption>
     </motion.figure>
@@ -448,15 +466,18 @@ function App() {
               style={{
                 opacity: shouldReduceMotion ? 1 : mobilePreviewOpacity,
               }}
-              className="absolute bottom-6 left-1/2 w-[92vw] max-w-lg -translate-x-1/2 overflow-hidden rounded-2xl border border-white/10 bg-black"
+              className="absolute bottom-6 left-1/2 w-[92vw] max-w-lg -translate-x-1/2 overflow-hidden rounded-2xl border border-white/[0.08] bg-black shadow-xl ring-1 ring-white/5"
             >
-              <img
-                src={facilities[activeIndex].image}
-                alt={facilities[activeIndex].title}
-                loading="lazy"
-                className="block h-auto w-full max-h-[min(42vh,380px)] object-contain object-center"
-              />
-              <p className="border-t border-white/10 bg-black/60 px-3 py-2 text-center text-xs font-medium text-zinc-200">
+              <div className="relative">
+                <img
+                  src={facilities[activeIndex].image}
+                  alt={facilities[activeIndex].title}
+                  loading="lazy"
+                  className="relative z-[1] block h-auto w-full max-h-[min(42vh,380px)] object-contain object-center brightness-[0.65] contrast-[1.06] saturate-90"
+                />
+                <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/85 via-black/35 to-black/45" />
+              </div>
+              <p className="relative z-10 border-t border-white/10 bg-black/90 px-3 py-2.5 text-center text-xs font-semibold tracking-wide text-zinc-100">
                 {facilities[activeIndex].title}
               </p>
             </motion.div>
