@@ -109,14 +109,27 @@ const whyChoose = [
 
 const facilitySlug = (title) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-function StackedCard({ item, idx, total, progress, onSelect }) {
+function useStackGap() {
+  const [gap, setGap] = useState(36);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setGap(mq.matches ? 56 : 34);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return gap;
+}
+
+function StackedCard({ item, idx, total, progress, onSelect, stackGap }) {
   const start = idx / total;
   const end = (idx + 1) / total;
   const local = useTransform(progress, [start, end], [0, 1]);
-  const y = useTransform(local, [0, 1], [idx * 10, -220]);
-  const rotateX = useTransform(local, [0, 1], [0, 14]);
-  const opacity = useTransform(local, [0, 0.8, 1], [1 - idx * 0.07, 0.6, 0]);
-  const scale = useTransform(local, [0, 1], [1 - idx * 0.03, 0.88 - idx * 0.01]);
+  const baseY = idx * stackGap;
+  const y = useTransform(local, [0, 1], [baseY, -280 - stackGap]);
+  const rotateX = useTransform(local, [0, 1], [0, 11]);
+  const opacity = useTransform(local, [0, 0.8, 1], [Math.max(0.12, 1 - idx * 0.095), 0.45, 0]);
+  const scale = useTransform(local, [0, 1], [1 - idx * 0.045, 0.82 - idx * 0.012]);
 
   return (
     <motion.article
@@ -152,14 +165,15 @@ function StackedCard({ item, idx, total, progress, onSelect }) {
   );
 }
 
-function PhotoSlide({ item, idx, total, progress }) {
+function PhotoSlide({ item, idx, total, progress, stackGap }) {
   const start = idx / total;
   const end = (idx + 1) / total;
   const local = useTransform(progress, [start, end], [0, 1]);
-  const y = useTransform(local, [0, 1], [idx * 10, -180]);
-  const x = useTransform(local, [0, 1], [0, 40]);
-  const opacity = useTransform(local, [0, 0.8, 1], [1 - idx * 0.08, 0.6, 0]);
-  const scale = useTransform(local, [0, 1], [1 - idx * 0.025, 0.9 - idx * 0.01]);
+  const photoStep = stackGap * 0.42;
+  const y = useTransform(local, [0, 1], [idx * photoStep, -200]);
+  const x = useTransform(local, [0, 1], [0, 36]);
+  const opacity = useTransform(local, [0, 0.8, 1], [Math.max(0.15, 1 - idx * 0.09), 0.5, 0]);
+  const scale = useTransform(local, [0, 1], [1 - idx * 0.035, 0.88 - idx * 0.012]);
 
   return (
     <motion.figure
@@ -307,6 +321,7 @@ function App() {
   const shouldReduceMotion = useReducedMotion();
   const [isDesktop, setIsDesktop] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const stackGap = useStackGap();
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 1024px)");
@@ -407,6 +422,7 @@ function App() {
                     total={facilities.length}
                     progress={scrollYProgress}
                     onSelect={handleFacilitySelect}
+                    stackGap={stackGap}
                   />
                 ))}
               </div>
@@ -416,7 +432,14 @@ function App() {
           {isDesktop && (
             <div className="absolute right-6 top-1/2 z-20 hidden h-[440px] w-[300px] -translate-y-1/2 lg:block">
               {facilities.map((item, idx) => (
-                <PhotoSlide key={`${item.title}-photo`} item={item} idx={idx} total={facilities.length} progress={scrollYProgress} />
+                <PhotoSlide
+                  key={`${item.title}-photo`}
+                  item={item}
+                  idx={idx}
+                  total={facilities.length}
+                  progress={scrollYProgress}
+                  stackGap={stackGap}
+                />
               ))}
             </div>
           )}
