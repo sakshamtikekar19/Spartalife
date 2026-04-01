@@ -25,14 +25,14 @@ const facilities = [
   { title: "Zumba", desc: "High-energy movement and rhythm-driven workouts.", type: "performance", image: "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?auto=format&fit=crop&q=80&w=1200" },
   { title: "Pilates", desc: "Core precision and controlled strength.", type: "performance", image: "https://images.unsplash.com/photo-1518310383802-640c2de311b6?auto=format&fit=crop&q=80&w=1200" },
   { title: "Skin-Friendly Pool", desc: "Advanced filtration for non-irritant swimming.", type: "wellness", image: "https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=1200" },
-  { title: "Infrared Sauna", desc: "Deep tissue detox and guided recovery.", type: "wellness", image: "https://images.unsplash.com/photo-1628162575403-7d5f8b0f9ca4?auto=format&fit=crop&q=80&w=1200" },
+  { title: "Infrared Sauna", desc: "Deep tissue detox and guided recovery.", type: "wellness", image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&q=80&w=1200" },
   { title: "Ice Bath", desc: "Cold plunge therapy for rapid restoration.", type: "wellness", image: "https://images.unsplash.com/photo-1540206276207-3af25c08abc4?auto=format&fit=crop&q=80&w=1200" },
   { title: "Meditation", desc: "Mind-body reset with calm immersive sessions.", type: "wellness", image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200" },
   { title: "Physiotherapy", desc: "Clinical movement care and rehabilitation.", type: "wellness", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=1200" },
   { title: "Yoga", desc: "Mobility, breathwork, and flexibility training.", type: "wellness", image: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&q=80&w=1200" },
   { title: "Massage Therapy", desc: "Targeted muscle release and relaxation.", type: "wellness", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=1200" },
   { title: "Healthy Cafe", desc: "Post-workout nutrition and curated menu.", type: "wellness", image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=1200" },
-  { title: "Banquet Hall", desc: "Lifestyle events in a premium social setting.", type: "wellness", image: "https://images.unsplash.com/photo-1519167758481-83f29c4f14a3?auto=format&fit=crop&q=80&w=1200" },
+  { title: "Banquet Hall", desc: "Lifestyle events in a premium social setting.", type: "wellness", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1200" },
 ];
 
 const topAmenities = [
@@ -223,33 +223,70 @@ function ProtocolStepCard({ step, index, activeStep, setActiveStep }) {
     <motion.article
       ref={ref}
       animate={{
-        scale: isActive ? 1.05 : 1,
-        opacity: isActive ? 1 : 0.2,
+        scale: isActive ? 1.04 : 1,
+        opacity: isActive ? 1 : 0.22,
       }}
-      transition={{ type: "spring", stiffness: 320, damping: 28 }}
-      className={`relative min-h-[min(45vh,400px)] scroll-mt-28 rounded-2xl border p-6 backdrop-blur-xl md:p-8 ${
+      transition={{ type: "spring", stiffness: 340, damping: 30 }}
+      className={`relative mx-auto w-full max-w-xl scroll-mt-24 rounded-2xl border border-white/[0.06] border-l-[3px] bg-gradient-to-br from-zinc-900/95 via-[#0c0c0c] to-black p-5 shadow-xl backdrop-blur-xl md:p-6 lg:mx-0 ${
         isActive
-          ? "z-10 border-emerald-400/50 bg-white/[0.08] shadow-[0_0_40px_rgba(16,185,129,0.35),0_0_80px_rgba(16,185,129,0.12)]"
-          : "z-0 border-white/10 bg-white/5"
+          ? "z-10 border-l-emerald-400/80 shadow-[0_0_32px_rgba(16,185,129,0.28),0_16px_40px_-12px_rgba(0,0,0,0.85)] ring-1 ring-emerald-500/20"
+          : "z-0 border-l-white/15 ring-1 ring-white/[0.04]"
       }`}
     >
-      <div className="flex items-start gap-4">
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-white/[0.03] to-transparent" />
+      <div className="relative flex items-start gap-3 md:gap-4">
         <div
-          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border ${
-            isActive ? "border-emerald-400/60 bg-emerald-500/15 text-emerald-300" : "border-white/10 bg-white/5 text-zinc-500"
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border md:h-11 md:w-11 ${
+            isActive ? "border-emerald-400/55 bg-emerald-500/12 text-emerald-300" : "border-white/10 bg-white/5 text-zinc-500"
           }`}
         >
-          <Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
+          <Icon className="h-5 w-5 md:h-[22px] md:w-[22px]" strokeWidth={1.75} aria-hidden />
         </div>
-        <div className="min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400/90">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-emerald-400/85 md:text-[11px]">
             Step {String(index + 1).padStart(2, "0")}
           </p>
-          <h4 className="mt-2 text-xl font-black tracking-[-0.05em] text-white md:text-2xl">{step.title}</h4>
-          <p className="mt-3 text-sm leading-relaxed tracking-tight text-zinc-300 md:text-base">{step.desc}</p>
+          <h4 className="mt-1.5 text-lg font-black tracking-[-0.05em] text-white md:text-xl">{step.title}</h4>
+          <p className="mt-2 text-xs leading-relaxed tracking-tight text-zinc-400 md:text-sm">{step.desc}</p>
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function WhyChooseCard({ item, index }) {
+  return (
+    <motion.div
+      className="h-full"
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px 0px", amount: 0.2 }}
+      transition={{
+        duration: 1.05,
+        delay: index * 0.14,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <motion.article
+        animate={{ y: [0, -5, 0] }}
+        transition={{
+          duration: 7 + index * 0.35,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: index * 0.4,
+        }}
+        className="relative h-full rounded-2xl border border-white/[0.06] border-l-[3px] border-l-amber-500/60 bg-gradient-to-br from-zinc-900/95 via-[#0c0c0c] to-black p-5 shadow-xl backdrop-blur-xl ring-1 ring-amber-500/15 md:p-6"
+      >
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-amber-500/[0.04] to-transparent" />
+        <div className="relative">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-400/90 md:text-[11px]">
+            {String(index + 1).padStart(2, "0")}
+          </p>
+          <h4 className="mt-2 text-lg font-black tracking-[-0.05em] text-white md:text-xl">{item.title}</h4>
+          <p className="mt-2 text-xs leading-relaxed tracking-tight text-zinc-400 md:text-sm">{item.desc}</p>
+        </div>
+      </motion.article>
+    </motion.div>
   );
 }
 
@@ -317,7 +354,7 @@ function ElitePerformanceProtocol() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-6 md:gap-8">
+          <div className="flex flex-col gap-4 md:gap-5">
             {eliteProtocolSteps.map((step, index) => (
               <ProtocolStepCard
                 key={step.title}
@@ -526,13 +563,9 @@ function App() {
       <section className="border-t border-white/10 bg-black py-20">
         <div className="mx-auto max-w-7xl px-6">
           <h3 className="text-4xl font-black tracking-[-0.05em] md:text-5xl">Why Choose Sparta Life?</h3>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid max-w-5xl gap-4 md:grid-cols-2 md:gap-5">
             {whyChoose.map((item, idx) => (
-              <article key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                <p className="text-sm font-semibold text-amber-300">{String(idx + 1).padStart(2, "0")}</p>
-                <h4 className="mt-2 text-2xl font-bold tracking-[-0.03em]">{item.title}</h4>
-                <p className="mt-3 text-sm leading-6 text-zinc-300 md:text-base">{item.desc}</p>
-              </article>
+              <WhyChooseCard key={item.title} item={item} index={idx} />
             ))}
           </div>
         </div>
