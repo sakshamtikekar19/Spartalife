@@ -145,7 +145,7 @@ function App() {
           poster="https://images.unsplash.com/photo-1594737625785-c68f88650967?auto=format&fit=crop&q=80&w=1600"
         >
           <source
-            src="/videos/hero.mp4"
+            src={`${process.env.PUBLIC_URL}/videos/hero.mp4`}
             type="video/mp4"
           />
         </video>
