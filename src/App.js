@@ -19,6 +19,50 @@ const facilities = [
   { title: "Banquet Hall", desc: "Lifestyle events in a premium social setting.", type: "wellness", image: "https://images.unsplash.com/photo-1519167758481-83f29c4f14a3?auto=format&fit=crop&q=80&w=1200" },
 ];
 
+const topAmenities = [
+  {
+    title: "AI Fitness Gym",
+    desc: "Experience the future of fitness in India's first AI smart gym. We offer a comprehensive training environment where all your fitness needs are met on a single floor.",
+  },
+  {
+    title: "Skin Friendly Pool",
+    desc: "95% less chlorine, no tanning, fully indoor. Dive into India's first skin-friendly pool, designed for comfort, safety, and better recovery.",
+  },
+  {
+    title: "Neon Badminton Court",
+    desc: "A scientific approach to your goals. Our coaching and match environment are designed to remove guesswork and improve performance consistently.",
+  },
+];
+
+const trainingSteps = [
+  "Blood Report",
+  "Full Body Assessment",
+  "Goal Setting",
+  "Workout Plan",
+  "Diet Plan",
+  "Meal Subscription",
+  "Optimal Recovery Time",
+];
+
+const whyChoose = [
+  {
+    title: "Youth Development",
+    desc: "Structured coaching for kids (6-18 yrs) in football, cricket, and more.",
+  },
+  {
+    title: "Transformation Packages",
+    desc: "Specialized packages for weight loss, muscle gain, anti-aging, and pre-wedding transformations.",
+  },
+  {
+    title: "Corporate Wellness",
+    desc: "Tailored solutions for employee health and events.",
+  },
+  {
+    title: "Sim-Racing",
+    desc: "Visit the first Sim-racing academy in town.",
+  },
+];
+
 const facilitySlug = (title) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 function StackedCard({ item, idx, total, progress, onSelect }) {
@@ -136,7 +180,7 @@ function App() {
 
       <section className="relative z-20 flex min-h-[85vh] items-center border-b border-white/10 md:min-h-screen">
         <video
-          className="absolute inset-0 h-full w-full object-cover object-[center_68%] md:object-[center_60%]"
+          className="absolute inset-0 h-full w-full object-cover object-[center_55%] sm:object-[center_62%] md:object-[center_60%]"
           autoPlay
           muted
           loop
@@ -209,14 +253,17 @@ function App() {
               style={{
                 opacity: shouldReduceMotion ? 1 : mobilePreviewOpacity,
               }}
-              className="absolute bottom-6 left-1/2 w-[88vw] -translate-x-1/2 overflow-hidden rounded-2xl border border-white/10 bg-black/40"
+              className="absolute bottom-6 left-1/2 w-[92vw] max-w-lg -translate-x-1/2 overflow-hidden rounded-2xl border border-white/10 bg-black"
             >
               <img
                 src={facilities[activeIndex].image}
                 alt={facilities[activeIndex].title}
                 loading="lazy"
-                className="h-36 w-full object-cover"
+                className="block h-auto w-full max-h-[min(42vh,380px)] object-contain object-center"
               />
+              <p className="border-t border-white/10 bg-black/60 px-3 py-2 text-center text-xs font-medium text-zinc-200">
+                {facilities[activeIndex].title}
+              </p>
             </motion.div>
           )}
         </div>
@@ -235,6 +282,54 @@ function App() {
             <button className="rounded-full border border-white px-10 py-3 font-semibold text-white transition hover:bg-white hover:text-black">
               Enquire for Membership
             </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-black py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <h3 className="text-4xl font-black tracking-[-0.05em] md:text-5xl">Our Amenities</h3>
+          <p className="mt-4 max-w-4xl text-zinc-300">
+            Sparta Life offers a complete range of fitness and wellness services designed to help you build strength,
+            improve performance, and elevate your lifestyle.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {topAmenities.map((amenity) => (
+              <article key={amenity.title} className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                <h4 className="text-2xl font-bold tracking-[-0.03em]">{amenity.title}</h4>
+                <p className="mt-3 text-sm leading-6 text-zinc-300 md:text-base">{amenity.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-black py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <h3 className="text-4xl font-black tracking-[-0.05em] md:text-5xl">Our Training System</h3>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {trainingSteps.map((step, idx) => (
+              <div key={step} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-emerald-300">Step {idx + 1}</p>
+                <p className="mt-3 text-lg font-semibold text-white">{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-black py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <h3 className="text-4xl font-black tracking-[-0.05em] md:text-5xl">Why Choose Sparta Life?</h3>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {whyChoose.map((item, idx) => (
+              <article key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                <p className="text-sm font-semibold text-amber-300">{String(idx + 1).padStart(2, "0")}</p>
+                <h4 className="mt-2 text-2xl font-bold tracking-[-0.03em]">{item.title}</h4>
+                <p className="mt-3 text-sm leading-6 text-zinc-300 md:text-base">{item.desc}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
